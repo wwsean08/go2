@@ -24,26 +24,30 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/wwsean08/go2/handler"
+	"github.com/spf13/viper"
 )
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Run the web server",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `Runs a web server on 0.0.0.0 on the specified port
+in the config, or 4646 if none is specified.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run called")
+		router := handler.SetupHandlers()
+		address := fmt.Sprintf("0.0.0.0:%d", viper.GetInt("port"))
+		err := router.Start(address)
+		if err != nil {
+			errorMsg := fmt.Sprintf("Got the following error starting the server: %v", err.Error())
+			fmt.Println(errorMsg)
+		}
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(runCmd)
-
+	viper.SetDefault("port", 4646)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
+  version = "v3.1.0"
+
+[[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "f12c6236fe7b5cf6bcf30e5935d08cb079d78334"
@@ -24,9 +30,33 @@
   revision = "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
 
 [[projects]]
+  name = "github.com/labstack/echo"
+  packages = [".","middleware"]
+  revision = "0473c51f1dbd83487effce00702571d19033a6e5"
+  version = "3.2.5"
+
+[[projects]]
+  name = "github.com/labstack/gommon"
+  packages = ["bytes","color","log","random"]
+  revision = "57409ada9da0f2afad6664c49502f8c50fbd8476"
+  version = "0.2.3"
+
+[[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
   revision = "61b492c03cf472e0c6419be5899b8e0dc28b1b88"
+
+[[projects]]
+  name = "github.com/mattn/go-colorable"
+  packages = ["."]
+  revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
+  version = "v0.0.9"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
+  version = "v0.0.3"
 
 [[projects]]
   name = "github.com/mitchellh/mapstructure"
@@ -86,9 +116,22 @@
   revision = "7fb2782df3d83e0036cc89f461ed0422628776f4"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/valyala/bytebufferpool"
+  packages = ["."]
+  revision = "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/valyala/fasttemplate"
+  packages = ["."]
+  revision = "dcecefd839c4193db0d35b88ec65b4c12d360ab0"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["curve25519","ed25519","ed25519/internal/edwards25519","ssh"]
-  revision = "81e90905daefcd6fd217b62423c0908922eadb30"
+  packages = ["acme","acme/autocert","curve25519","ed25519","ed25519/internal/edwards25519","ssh"]
+  revision = "9f005a07e0d31d45e6656d241bb5c0f2efd4bc94"
 
 [[projects]]
   name = "golang.org/x/sys"
@@ -108,6 +151,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cedab998d549c04edb787ac3297e18e8777126c9a0407d207284faa799dcce1d"
+  inputs-digest = "151d0bf102adb404269f39ebfeeb613473b15a4817498acdc895c05d78d26ec8"
   solver-name = "gps-cdcl"
   solver-version = 1
