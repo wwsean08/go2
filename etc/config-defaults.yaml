@@ -1,0 +1,10 @@
+port: 4646
+app_base_dir: /usr/share/go2
+
+postgres:
+    host: 172.17.0.2
+    port: 5432
+    database: postgres
+    user: postgres
+    password: go2
+    sslmode: false
