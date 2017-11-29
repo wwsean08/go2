@@ -24,8 +24,12 @@ import (
 	"fmt"
 	"os"
 
+	"database/sql"
+	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/wwsean08/go2/handler"
+	"log"
 )
 
 var cfgFile string
@@ -37,7 +41,19 @@ var RootCmd = &cobra.Command{
 
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) {},
+	Run: func(cmd *cobra.Command, args []string) {
+		conn, err := getDBConn()
+		if err != nil {
+			log.Panicf("Error when connecting to database, aborting startup: %v", err)
+		}
+		router := handler.SetupHandlers(conn)
+		address := fmt.Sprintf("0.0.0.0:%d", viper.GetInt("port"))
+		err = router.Start(address)
+		if err != nil {
+			errorMsg := fmt.Sprintf("Got the following error starting the server: %v", err.Error())
+			fmt.Println(errorMsg)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -56,7 +72,7 @@ func init() {
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
 
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.go2.yaml)")
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/go2/config.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -65,7 +81,7 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 	viper.SetConfigType("yaml")
-	viper.SetConfigName("config")  // name of config file (without extension)
+	viper.SetConfigName("config")                                                        // name of config file (without extension)
 	viper.AddConfigPath(fmt.Sprintf("$HOME/%s", viper.GetString("application.pkgName"))) // adding home directory as first search path
 	viper.AddConfigPath(fmt.Sprintf("/etc/%s", viper.GetString("application.pkgName")))
 	viper.AutomaticEnv() // read in environment variables that match
@@ -74,4 +90,32 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func getDBConn() (*sql.DB, error) {
+	// Set defaults if postgres enabled
+	if viper.IsSet("postgres") {
+		viper.SetDefault("postgres.sslmode", "disable")
+		viper.SetDefault("postgres.port", "5432")
+	}
+
+	//Get needed variables
+	database := viper.GetString("postgres.database")
+	user := viper.GetString("postgres.user")
+	pass := viper.GetString("postgres.password")
+	host := viper.GetString("postgres.host")
+	port := viper.GetInt("postgres.port")
+	SSLMode := viper.GetString("postgres.sslmode")
+
+	//Initialize and setup connection
+	conn_string := fmt.Sprintf(
+		"dbname=%s user=%s password=%s host=%s port=%d sslmode=%s",
+		database, user, pass, host, port, SSLMode)
+	var err error
+	db, err := sql.Open("postgres", conn_string)
+	if err != nil {
+		return nil, err
+	}
+
+	return db, db.Ping()
 }
