@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
@@ -92,6 +98,12 @@
   revision = "4d0e916071f68db74f8a73926335f809396d6b42"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/spf13/afero"
   packages = [".","mem","sftp"]
   revision = "b28a7effac979219c2a2ed6205a4d70e4b1bcd02"
@@ -120,6 +132,12 @@
   name = "github.com/spf13/viper"
   packages = ["."]
   revision = "7fb2782df3d83e0036cc89f461ed0422628776f4"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert","require"]
+  revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
+  version = "v1.1.4"
 
 [[projects]]
   branch = "master"
@@ -157,6 +175,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "29c2c978f6fa07e589569b46a4482430538347430cf937aed3f910d6b3eadebf"
+  inputs-digest = "e003a02aa8b7cc6cf1056755925a711fe5dc895d1454f0cbf25487589f2c3570"
   solver-name = "gps-cdcl"
   solver-version = 1
