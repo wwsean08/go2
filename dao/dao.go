@@ -7,8 +7,8 @@ import (
 )
 
 type RedirectorDAO interface {
-	AddURL() error
-	AddKeyword() error
+	AddURL(url, title string) error
+	AddKeyword(keyword string, isRegex bool) error
 	AddURLHistoryEvent() error
 	AssociateKeywordURL(keywordID, urlID int) error
 
@@ -43,15 +43,15 @@ func NewPostgresDAO(conn *sql.DB) RedirectorDAO {
 	return dao
 }
 
-func (dao psqlDAO) AddKeyword() error {
-	stmt := `INSERT INTO keyword (keyword, result_mode, is_regex) VALUES ($1, $2, $3)`
-	_, err := dao.conn.Exec(stmt)
+func (dao psqlDAO) AddKeyword(keyword string, isRegex bool) error {
+	stmt := `INSERT INTO keyword (keyword, is_regex) VALUES ($1, $2)`
+	_, err := dao.conn.Exec(stmt, keyword, isRegex)
 	return err
 }
 
-func (dao psqlDAO) AddURL() error {
+func (dao psqlDAO) AddURL(url, title string) error {
 	stmt := `INSERT INTO url (url, title) VALUES ($1, $2)`
-	_, err := dao.conn.Exec(stmt)
+	_, err := dao.conn.Exec(stmt, url, title)
 	return err
 }
 
