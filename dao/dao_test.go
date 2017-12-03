@@ -29,11 +29,13 @@ func TestPsqlDAO_AddKeyword(t *testing.T) {
 	require.NoError(t, err, "Unexpected Error [%v]", err)
 	defer db.Close()
 	dao := NewPostgresDAO(db)
+	keyword := "foo"
+	isRegex := true
 
-	mock.ExpectExec("INSERT INTO keyword").WithArgs("foo", true).WillReturnResult(
-		sqlmock.NewResult(1, 1))
-	err = dao.AddKeyword("foo", true)
+	mock.ExpectQuery("INSERT INTO keywords").WithArgs(keyword, isRegex).WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow("1"))
+	id, err := dao.AddKeyword(keyword, isRegex)
 	require.NoError(t, err, "Unexpected Error [%v]", err)
+	require.Equal(t, 1, id)
 
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err, "Expectations were not met [%v]", err)
@@ -47,10 +49,11 @@ func TestPsqlDAO_AddURL(t *testing.T) {
 	url := "https://example.com"
 	title := "example"
 
-	mock.ExpectExec("INSERT INTO url").WithArgs(url, title).WillReturnResult(
-		sqlmock.NewResult(1, 1))
-	err = dao.AddURL(url, title)
+	mock.ExpectQuery("INSERT INTO url").WithArgs(url, title).WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow("1000"))
+
+	id, err := dao.AddURL(url, title)
 	require.NoError(t, err, "Unexpected Error [%v]", err)
+	require.Equal(t, 1000, id)
 
 	err = mock.ExpectationsWereMet()
 	require.NoError(t, err, "Expectations were not met [%v]", err)

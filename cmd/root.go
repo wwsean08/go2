@@ -72,19 +72,20 @@ func init() {
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
 
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/go2/config.yaml)")
+	RootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/go2/config.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" { // enable ability to specify config file via flag
-		viper.SetConfigFile(cfgFile)
-	}
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("config")                                                        // name of config file (without extension)
 	viper.AddConfigPath(fmt.Sprintf("$HOME/%s", viper.GetString("application.pkgName"))) // adding home directory as first search path
 	viper.AddConfigPath(fmt.Sprintf("/etc/%s", viper.GetString("application.pkgName")))
 	viper.AutomaticEnv() // read in environment variables that match
+
+	if cfgFile != "" { // enable ability to specify config file via flag
+		viper.SetConfigFile(cfgFile)
+	}
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
@@ -93,11 +94,8 @@ func initConfig() {
 }
 
 func getDBConn() (*sql.DB, error) {
-	// Set defaults if postgres enabled
-	if viper.IsSet("postgres") {
-		viper.SetDefault("postgres.sslmode", "disable")
-		viper.SetDefault("postgres.port", "5432")
-	}
+	viper.SetDefault("postgres.sslmode", "disable")
+	viper.SetDefault("postgres.port", "5432")
 
 	//Get needed variables
 	database := viper.GetString("postgres.database")
@@ -108,11 +106,11 @@ func getDBConn() (*sql.DB, error) {
 	SSLMode := viper.GetString("postgres.sslmode")
 
 	//Initialize and setup connection
-	conn_string := fmt.Sprintf(
+	connString := fmt.Sprintf(
 		"dbname=%s user=%s password=%s host=%s port=%d sslmode=%s",
 		database, user, pass, host, port, SSLMode)
 	var err error
-	db, err := sql.Open("postgres", conn_string)
+	db, err := sql.Open("postgres", connString)
 	if err != nil {
 		return nil, err
 	}
