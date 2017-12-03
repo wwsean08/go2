@@ -7,4 +7,4 @@ postgres:
     database: postgres
     user: postgres
     password: go2
-    sslmode: false
+    sslmode: disable
